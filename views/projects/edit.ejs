@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<head>
+	<% include ../partials/header %>
+</head>
+<body>
+<% include ../partials/includes %>
+
+<div class="row">
+<div class="col-xs-12 col-md-6 col-md-offset-3">
+<h2>EDIT FORM</h2>
+<h3>Projekt ID: <%=project._id%></h3>
+<form action='/projects/<%=project._id%>/edit', method='post', name='updateblob', enctype='application/x-www-form-urlencoded'>
+  <div class="form-group">
+    <label for="inputName">Name</label>
+    <input type="text" class="form-control" name="naziv" placeholder="Naziv" value="<%= project.naziv %>">
+  </div>
+  <div class="form-group">
+    <label for="inputBadge">Opis</label>
+    <input type="text" class="form-control" name="opis" placeholder="Opis" value="<%= project.opis %>">
+  </div>
+ <div class="form-group">
+    <label for="inputDob">Cijena</label>
+    <input type="number" class="form-control" name="cijena" value="<%= project.cijena %>">
+  </div>
+  <div class="form-group">
+  <label for="inputDatumPocetka">Datum pocetka</label>
+       <div class='input-group date' id='datetimepicker1'>
+           <input type='text' class="form-control datumPocetka"  name="datumPocetka" value="<%= project.datumPocetka %>" />
+           <span class="input-group-addon">
+               <span class="glyphicon glyphicon-calendar"></span>
+           </span>
+       </div>
+   </div>
+  <div class="form-group">
+  <label for="inputDatumZavrsetka">Datum zavrsetka</label>
+       <div class='input-group date' id='datetimepicker1'>
+           <input type='text' class="form-control datumPocetka"  name="datumZavrsetka" value="<%= project.datumZavrsetka %>" />
+           <span class="input-group-addon">
+               <span class="glyphicon glyphicon-calendar"></span>
+           </span>
+       </div>
+   </div>
+  <div class="form-group">
+    <label for="inputClanovi">Clanovi</label>
+    <input type="text" class="form-control" name="clanovi" placeholder="Clanovi..." value="<%= project.clanovi %>">
+  </div>
+  <div class="checkbox">
+    <label>
+      <input name="obavljeniPoslovi" type="checkbox" <% if(project.obavljeniPoslovi == true) { %> checked <% } else { %> <% } %> > Obavljeni poslovi
+    </label>
+  </div>
+  <input type="hidden" value='PUT', name='_method'>
+  <button type="submit" class="btn btn-primary">Update</button>
+</form>
+  <a href='/projects/' class="btn btn-success" role="button">Go back</a>
+</div>
+</div>
+
+<script type="text/javascript">
+   $('.datumPocetka').datepicker({
+        format: 'mm/dd/yyyy'
+   });
+</script>
+
+<script type="text/javascript">
+         $(function () {
+             $('#datetimepicker1').datepicker({
+             	format: "mm/dd/yyyy"
+             });
+         });
+</script>
+
+</body>
+</html>

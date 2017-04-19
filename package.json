@@ -1,0 +1,21 @@
+{
+  "name": "express_nwp",
+  "version": "1.0.0",
+  "description": "nwp lv6",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Stjepan Radonic",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.17.1",
+    "cookie-parser": "^1.4.3",
+    "ejs": "^2.5.6",
+    "express": "^4.15.2",
+    "jade": "^1.11.0",
+    "method-override": "^2.3.8",
+    "mongoose": "^4.9.5",
+    "morgan": "^1.8.1"
+  }
+}

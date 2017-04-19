@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<head>
+	<% include ../partials/header %>
+</head>
+<body>
+	<h1 class="text-center">Project</h1>
+	<% include ../partials/includes %>
+
+<div class="row">
+<div class="col-xs-12 col-md-6 col-md-offset-3">
+	<ul class="list-group">
+	  <li class="list-group-item">Naziv: <%= project.naziv %></li>
+	  <li class="list-group-item">Opis: <%= project.opis %></li>
+	  <li class="list-group-item">Cijena: <%= project.cijena %></li>
+	  <li class="list-group-item">Clanovi: <%= project.clanovi %></li>
+	  <li class="list-group-item">Datum Pocetka: <%= project.datumPocetka %></li>
+	  <li class="list-group-item">Datum Zavrsetka: <%= project.datumZavrsetka %></li>
+	  <li class="list-group-item">Obavljeni poslovi: <%= project.obavljeniPoslovi %></li>
+	</ul>
+	<a href='/projects/' class="btn btn-primary" role="button">Back to projects</a>
+</div>
+</div>
+
+</body>
+</html>
