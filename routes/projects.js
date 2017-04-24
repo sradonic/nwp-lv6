@@ -3,10 +3,23 @@ var express = require('express'),
     mongoose = require('mongoose'), 
     bodyParser = require('body-parser'), 
     methodOverride = require('method-override'); 
+    var router = express.Router();
+var passport = require('passport');    
+var User = require('../models/user');
+
+var isAuthenticated = function(req, res, next){
+  if(req.isAuthenticated()){
+    return next();
+  } else {
+    req.flash('error_msg','You are not logged in');
+    res.redirect('/');
+  }
+}
 
 //Any requests to this controller must pass through this 'use' function
 //Copy and pasted from method-override
 router.use(bodyParser.urlencoded({ extended: true }))
+router.use(isAuthenticated)
 router.use(methodOverride(function(req, res){
       if (req.body && typeof req.body === 'object' && '_method' in req.body) {
         // look in urlencoded POST bodies and delete it
@@ -18,7 +31,7 @@ router.use(methodOverride(function(req, res){
 
 //build the REST operations at the base for projects
 //this will be accessible from http://127.0.0.1:3000/projects if the default route for / is left unchanged
-router.route('/')
+router.route('/', isAuthenticated)
     //GET all projects
     .get(function(req, res, next) {
         //retrieve all projects from Monogo
@@ -32,7 +45,8 @@ router.route('/')
                     html: function(){
                         res.render('projects/index', {
                               title: 'Projekti:',
-                              "projects" : projects
+                              "projects" : projects,
+                              user: req.user
                           });
                     },
                     //JSON response will show all projects in JSON format
@@ -53,6 +67,8 @@ router.route('/')
         var datumZavrsetka = req.body.datumZavrsetka;
         var obavljeniPoslovi = req.body.obavljeniPoslovi;
         var clanovi = req.body.clanovi;
+        var arhiva = req.body.arhiva;
+        var username= req.user.username;
         //call the create function for our database
         mongoose.model('Project').create({
             naziv : naziv,
@@ -61,7 +77,9 @@ router.route('/')
             datumPocetka : datumPocetka,
             datumZavrsetka : datumZavrsetka,
             obavljeniPoslovi : obavljeniPoslovi,
-            clanovi : clanovi
+            clanovi : clanovi,
+            arhiva: arhiva,
+            username: username
         }, function (err, project) {
               if (err) {
                   res.send("There was a problem adding the information to the database.");
@@ -87,7 +105,10 @@ router.route('/')
 
 /* GET New project page. */
 router.get('/new', function(req, res) {
-    res.render('projects/new', { title: 'Dodaj Novi Projekt' });
+    mongoose.model('User').find({}, function(err, user) {
+    res.render('projects/new', { title: 'Dodaj Novi Projekt', user: req.user, "users" : user });
+    console.log(user);
+  });
 });
 
 // route middleware to validate :id
@@ -148,6 +169,8 @@ router.route('/:id/edit')
             .get(function(req, res) {
                 //search for the project within Mongo
                 mongoose.model('Project').findById(req.id, function (err, project) {
+                    if(project.username == req.user.username) {
+                      mongoose.model('User').find({}, function(err, user) {
                     if (err) {
                         console.log('GET Error: There was a problem retrieving: ' + err);
                     } else {
@@ -157,7 +180,9 @@ router.route('/:id/edit')
                             //HTML response will render the 'edit.jade' template
                             html: function(){
                                 res.render('projects/edit', {
-                                    "project" : project
+                                    "project" : project,
+                                    user: req.user,
+                                    "users" : user 
                                 });
                             },
                             //JSON response will return the JSON output
@@ -166,7 +191,30 @@ router.route('/:id/edit')
                             }
                         });
                     }
-                });
+                  });
+                  }
+                  else {
+                         if (err) {
+                        console.log('GET Error: There was a problem retrieving: ' + err);
+                    } else {
+                        //Return the project
+                        console.log('GET Retrieving ID: ' + project._id);
+                        res.format({
+                            //HTML response will render the 'edit.jade' template
+                            html: function(){
+                                res.render('projects/edit', {
+                                    "project" : project,
+                                    user: req.user
+                                });
+                            },
+                            //JSON response will return the JSON output
+                            json: function(){
+                                res.json(project);
+                            }
+                        });
+                    }
+                  }
+             });
 	})
 	//PUT to update a project by ID
 	.put(function(req, res) {
@@ -177,10 +225,12 @@ router.route('/:id/edit')
 	    var datumPocetka = req.body.datumPocetka;
 	    var datumZavrsetka = req.body.datumZavrsetka;
         var obavljeniPoslovi = req.body.obavljeniPoslovi;
+        var arhiva = req.body.arhiva;
         var clanovi = req.body.clanovi;
 
 	    //find the document by ID
 	    mongoose.model('Project').findById(req.id, function (err, project) {
+              if(project.username == req.user.username) {
 	        //update it
 	        project.update({
                 naziv : naziv,
@@ -189,6 +239,7 @@ router.route('/:id/edit')
                 datumPocetka : datumPocetka,
                 datumZavrsetka : datumZavrsetka,
                 obavljeniPoslovi : obavljeniPoslovi,
+                arhiva : arhiva,
                 clanovi : clanovi
 	        }, function (err, projectID) {
 	          if (err) {
@@ -207,6 +258,28 @@ router.route('/:id/edit')
 	                  });
 	           }
 	        })
+              }
+              else {
+                project.update({
+                obavljeniPoslovi : obavljeniPoslovi
+          }, function (err, projectID) {
+            if (err) {
+                res.send("There was a problem updating the information to the database: " + err);
+            }
+            else {
+                    //HTML responds by going back to the page or you can be fancy and create a new view that shows a success page.
+                    res.format({
+                        html: function(){
+                             res.redirect("/projects/" + project._id);
+                       },
+                       //JSON responds showing the updated values
+                      json: function(){
+                             res.json(project);
+                       }
+                    });
+             }
+          })
+              }
 	    });
 	})
 	//DELETE a project by ID

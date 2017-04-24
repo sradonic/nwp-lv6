@@ -12,10 +12,15 @@
     "body-parser": "^1.17.1",
     "cookie-parser": "^1.4.3",
     "ejs": "^2.5.6",
-    "express": "^4.15.2",
+    "express": "*",
+    "express-session": "*",
     "jade": "^1.11.0",
     "method-override": "^2.3.8",
     "mongoose": "^4.9.5",
-    "morgan": "^1.8.1"
+    "morgan": "^1.8.1",
+    "passport": "*",
+     "bcrypt-nodejs" : "*",
+    "connect-flash" : "*",
+    "passport-local": "*"
   }
 }

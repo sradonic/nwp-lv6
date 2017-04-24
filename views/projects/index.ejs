@@ -3,10 +3,14 @@
 	<% include ../partials/header %>
 </head>
 <body>
+           <% include ../partials/includes %>
+           <a href='/home' class="btn btn-info" role="button">Profile</a>
+<a href='/signout' class="btn btn-warning" role="button">Logout</a>
 	<h1 class="text-center"><%= title %></h1>
-	<% include ../partials/includes %>
+	
 
-<div class="container">       
+<div class="container">      
+ <h4>Projekti koje sam napravio</h4>
   <table class="table table-hover">
     <thead>
       <tr>
@@ -23,7 +27,7 @@
       </tr>
     </thead>
     <tbody>
-    <% for(var i=0; i<projects.length; i++) {%>
+  <% for(var i=0; i<projects.length; i++) { %> <% if( projects[i].username == user.username && projects[i].arhiva != true) { %>  
       <tr>
         <td><%= projects[i].naziv %></td>
         <td><%= projects[i].opis %></td>
@@ -31,7 +35,7 @@
         <td><%= projects[i].clanovi %></td>
         <td><%= projects[i].datumPocetka %></td>
         <td><%= projects[i].datumZavrsetka %></td>
-        <td><%= projects[i].obavljeniPoslovi %></td>
+        <td><% if(projects[i].obavljeniPoslovi == true) {%> Da <% } else { %> Ne <% } %></td>
         <td>
         	<form action='/projects/<%=projects[i]._id%>/edit', method='post', enctype='application/x-www-form-urlencoded'>
 	  	<input type="hidden" value='DELETE', name='_method'>
@@ -41,11 +45,79 @@
         <td><a href='/projects/<%= projects[i]._id%>/edit' class="btn btn-warning" role="button">Edit</a></td>
         <td><a href='/projects/<%= projects[i]._id%>' class="btn btn-info" role="button">Show</a></td>
       </tr>
-
-    <% } %>
+        <% } } %>
         </tbody>
   </table>
+
   <a href='/projects/new' class="btn btn-success" role="button">Add new</a>
+<br><br>
+
+ <h4>Projekti na koje sam dodan</h4>
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th>Naziv</th>
+        <th>Opis</th>
+        <th>Cijena</th>
+        <th>Clanovi</th>
+        <th>Datum Pocetka</th>
+        <th>Datum Zavrsetka</th>
+        <th>Obavljeni Poslovi</th>
+        <th>Creator</th>
+        <th>Edit</th>
+        <th>Show</th>
+      </tr>
+    </thead>
+    <tbody>
+    <% for(var i=0; i<projects.length; i++) { %> <% if( projects[i].clanovi.includes(user.username) && projects[i].arhiva != true) { %>  
+      <tr>
+        <td><%= projects[i].naziv %></td>
+        <td><%= projects[i].opis %></td>
+        <td><%= projects[i].cijena %></td>
+        <td><%= projects[i].clanovi %></td>
+        <td><%= projects[i].datumPocetka %></td>
+        <td><%= projects[i].datumZavrsetka %></td>
+        <td><% if(projects[i].obavljeniPoslovi == true) {%> Da <% } else { %> Ne <% } %></td>
+        <td><%= projects[i].username %></td>
+        <td><a href='/projects/<%= projects[i]._id%>/edit' class="btn btn-warning" role="button">Edit</a></td>
+        <td><a href='/projects/<%= projects[i]._id%>' class="btn btn-info" role="button">Show</a></td>
+      </tr>
+        <% } } %>
+        </tbody>
+  </table>
+
+   <h4>Arhivirani projekti</h4>
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th>Naziv</th>
+        <th>Opis</th>
+        <th>Cijena</th>
+        <th>Clanovi</th>
+        <th>Datum Pocetka</th>
+        <th>Datum Zavrsetka</th>
+        <th>Obavljeni Poslovi</th>
+        <th>Creator</th>
+        <th>Show</th>
+      </tr>
+    </thead>
+    <tbody>
+    <% for(var i=0; i<projects.length; i++) { %> <% if( (projects[i].arhiva == true && projects[i].clanovi.includes(user.username)) || (projects[i].arhiva == true && projects[i].username==user.username) ) { %>  
+      <tr>
+        <td><%= projects[i].naziv %></td>
+        <td><%= projects[i].opis %></td>
+        <td><%= projects[i].cijena %></td>
+        <td><%= projects[i].clanovi %></td>
+        <td><%= projects[i].datumPocetka %></td>
+        <td><%= projects[i].datumZavrsetka %></td>
+        <td><% if(projects[i].obavljeniPoslovi == true) {%> Da <% } else { %> Ne <% } %></td>
+        <td><%= projects[i].username %></td>
+        <td><a href='/projects/<%= projects[i]._id%>' class="btn btn-info" role="button">Show</a></td>
+      </tr>
+        <% } } %>
+        </tbody>
+  </table>
+
 </div>
 </body>
 </html>

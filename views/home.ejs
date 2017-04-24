@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<head>
+  <% include ../views/partials/header %>
+</head>
+<body>
+  <% include ../views/partials/includes %>
+
+<!--This stylesheet should be moved to the head of the document -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+
+<br>
+<br>
+<br>
+
+<div class="container">
+    <div class="row">
+        <div class=" col-lg-offset-3 col-lg-6">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="row">
+                                <div class="col-sm-offset-3 col-sm-6 col-md-offset-3 col-md-6 col-lg-offset-3 col-lg-6">
+                                    <img class="img-circle img-responsive" src="http://simpleicon.com/wp-content/uploads/multy-user.png">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="row">
+                                <div class="centered-text col-sm-offset-3 col-sm-6 col-md-offset-3 col-md-6 col-lg-offset-3 col-lg-6">
+                                    <div itemscope="" itemtype="http://schema.org/Person">
+                                        <h2> <span itemprop="name"><%=user.username%></span></h2>
+                                        <p itemprop="name"><%=user.firstName%></p>
+                                        <p><span itemprop="surname"><%=user.lastName%></span></p>
+                                        <p itemprop="email"> <i class="fa fa-envelope"></i> <%=user.email%> </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="col-md-12 text-center"> 
+  <a href='/projects/' class="btn btn-success text-center" role="button">Go to Projects</a>
+  <br><br><br>
+  <a href='/signout' class="btn btn-warning" role="button">Logout</a>
+  </div>

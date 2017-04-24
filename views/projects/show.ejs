@@ -3,8 +3,10 @@
 	<% include ../partials/header %>
 </head>
 <body>
-	<h1 class="text-center">Project</h1>
 	<% include ../partials/includes %>
+	<a href='/home' class="btn btn-info" role="button">Profile</a>
+<a href='/signout' class="btn btn-warning" role="button">Logout</a>
+	<h1 class="text-center">Project</h1>
 
 <div class="row">
 <div class="col-xs-12 col-md-6 col-md-offset-3">
@@ -15,7 +17,8 @@
 	  <li class="list-group-item">Clanovi: <%= project.clanovi %></li>
 	  <li class="list-group-item">Datum Pocetka: <%= project.datumPocetka %></li>
 	  <li class="list-group-item">Datum Zavrsetka: <%= project.datumZavrsetka %></li>
-	  <li class="list-group-item">Obavljeni poslovi: <%= project.obavljeniPoslovi %></li>
+	  <li class="list-group-item">Arhiviran: <% if(project.arhiva == true) {%> Arhiviran <% } else { %> Nije arhiviran <% } %></li>
+	  <li class="list-group-item">Obavljeni poslovi: <% if(project.obavljeniPoslovi == true) {%> Da <% } else { %> Ne <% } %></li>
 	</ul>
 	<a href='/projects/' class="btn btn-primary" role="button">Back to projects</a>
 </div>
